@@ -60,6 +60,9 @@ class BatteryMusicNotifier:
         self.MAX_CONSECUTIVE_ERRORS = 5
 
     def _initialize_notifier(self):
+        
+        """Initialize platform-specific notification system"""
+        
         try:
             if self.system == "Windows":
                 return ToastNotifier()
@@ -78,6 +81,9 @@ class BatteryMusicNotifier:
             return None
 
     def send_notification(self, title, message):
+        
+        """Send cross-platform notifications"""
+        
         try:
             if self.system == "Windows" and self.notifier:
                 self.notifier.show_toast(title , message , duration=5)
@@ -95,6 +101,9 @@ class BatteryMusicNotifier:
 
 
     def play_music(self):
+        
+        """Play music with error handling and notifications"""
+        
         try :
             if not os.path.exist(self.music_file_path):
                 logging.error(f"Music file not found : {self.music_file_path}")
@@ -113,6 +122,9 @@ class BatteryMusicNotifier:
             logging.error(f"Music Playback error {e}")
 
     def _play_audio_thread(self):
+        
+        """Audio playback in a separate thread"""
+        
         try:
             date , samplerate = sf.read(self.music_file_path)
             while not self.stop_playback.is_set():
@@ -123,6 +135,9 @@ class BatteryMusicNotifier:
 
 
     def stop_music(self):
+        
+        """Stop music playback with error handling"""
+        
         try:
             if self.song_playing:
                 self.stop_playback.set()
@@ -143,6 +158,8 @@ class BatteryMusicNotifier:
         except Exception as e:
             logging.error(f"Music stop error: {e}")
     def get_battery_info(self):
+        """Get battery information with error handling"""
+        
         try:
             if self.system == "Windows":
                 return self._get_windows_battery()
@@ -158,6 +175,10 @@ class BatteryMusicNotifier:
             logging.error(f"Battery info retrieval error: {e}")
             return None
     def _get_windows_battery(self):
+        
+        """Retrieve battery information for Windows"""
+
+        
         import wmi
         c = wmi.WMI()
         battery = c.Win32_Battery()[0]
@@ -181,6 +202,10 @@ class BatteryMusicNotifier:
         }
 
     def _get_macos_battery(self):
+        
+        """Retrieve battery information for macOS"""
+
+        
         result = subprocess.check_output(['pmset', '-g', 'batt']).decode('utf-8')
         percentage = int(result.split('\t')[1].split('%')[0])
         current_charging = 'AC Power' in result
@@ -200,6 +225,8 @@ class BatteryMusicNotifier:
             'charging_status_changed': charging_status_changed
         }
     def _get_linux_battery(self):
+        """Retrieve battery information for Linux"""
+        
         result = subprocess.check_output(['acpi', '-b']).decode('utf-8')
         percentage = int(result.split(': ')[1].split('%')[0])
         current_charging = 'Charging' in result
@@ -218,6 +245,9 @@ class BatteryMusicNotifier:
             'charging_status_changed': charging_status_changed
         }
     def monitor_battery_and_music(self):
+        """ battery and music monitoring"""
+
+        
         logging.info("Battery and Music Monitoring Started...")
 
         while True:
