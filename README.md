@@ -17,7 +17,7 @@ Play a music file when your battery is charged within a specified range (e.g., 9
    ```bash
    git clone https://github.com/yourusername/battery-music-monitor.git
    cd battery-music-monitor
-##Usage
+## Usage
 - Edit the script:
 - Replace Path to music.wav in main() with your audio file's absolute path
 
@@ -29,11 +29,11 @@ All Platforms:
    ```bash
   pip install sounddevice soundfile
  ```
-##Windows
+## Windows
 ```bash
   pip install wmi win10toast # Windows
  ```
-##MacOS
+## MacOS
 ```bash
   pip install pync  #Mac os
 
