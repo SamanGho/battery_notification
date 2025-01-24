@@ -8,6 +8,21 @@ import soundfile as sf
 import time
 import logging
 
+log_directory='Put Your log dir'
+os.makedirs(log_directory, exist_ok=True) 
+log_file_path = os.path.join(log_directory, 'battery_music_monitor.log')
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s: %(message)s',
+    handlers=[
+        logging.FileHandler(log_file_path)
+        , logging.StreamHandler()
+    ]
+)
+
+    
+
 class BatteryMusicNotifier:
     def __init__(self, music_file_path, min_percentage=99, max_percentage=100):
         self.music_file_path = music_file_path
