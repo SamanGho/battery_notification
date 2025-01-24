@@ -103,3 +103,13 @@ class BatteryMusicNotifier:
     def monitor_battery_and_music(self):
         pass
         
+def main():
+    #full path to music
+    music_file_path = r"Path to music.wav"
+
+    notifier = BatteryMusicNotifier(music_file_path)
+    notifier.monitor_battery_and_music()
+
+
+if __name__== "__main__":
+    main()
