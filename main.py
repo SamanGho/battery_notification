@@ -6,7 +6,7 @@ import threading
 import sounddevice as sd
 import soundfile as sf
 import time
-
+import logging
 
 class BatteryMusicNotifier:
     def __init__(self, music_file_path, min_percentage=99, max_percentage=100):
