@@ -24,3 +24,22 @@ class BatteryMusicNotifier:
 
         self.consecutive_errors = 0
         self.MAX_CONSECUTIVE_ERRORS = 5
+
+    def _initialize_notifier(self):
+        try:
+            if self.system=="Windows":
+                return ToastNotifier()
+            elif self.system=="Darwin":
+                return pync
+            elif self.system == "Linux":
+                if 'notify' in globals():
+                    notify2.init("Battery Music Notifier")
+                    return notify2
+                elif 'Notify' in globals():
+                    Notify.init("Battery Music Notifier")
+                    return Notify
+                return None
+        except Exception as e:
+            logging.error(f"Notification system initialization error: {e}")
+            return None
+                    
