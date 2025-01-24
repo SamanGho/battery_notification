@@ -21,6 +21,20 @@ logging.basicConfig(
     ]
 )
 
+if platform.system() == "Windows":
+    from win10toast import ToastNotifier
+elif platform.system() == "Darwin":  #MAC
+    import pync
+else:  # Linux
+    try:
+        import notify2
+    except ImportError:
+        try:
+            from gi.repository import Notify
+        except ImportError:
+            logging.warning("No notification library found for Linux")
+            Notify = None
+
     
 
 class BatteryMusicNotifier:
