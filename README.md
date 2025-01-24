@@ -15,11 +15,10 @@ A cross-platform tool that plays music when your device battery reaches a specif
 - OS-specific tools (see below)
 
 ## Installation
-
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/battery-music-monitor.git
-   cd battery-music-monitor
+   git clone https://github.com/SamanGho/battery_notification.git
+   cd battery_notification
 ## Usage
 - Edit the script:
 - Replace Path to music.wav in main() with your audio file's absolute path
