@@ -1,11 +1,14 @@
-# Battery Music Monitor
+# 🔋🎵 Battery Music Monitor
 
-Play a music file when your battery is charged within a specified range (e.g., 99-100%).
+A cross-platform tool that plays music when your device battery reaches a specified charge level (e.g., 99-100%), ideal for protecting battery health during charging.
 
-## Features
-- Plays music when battery reaches target percentage while charging.
-- Stops music when unplugged or outside the target range.
-- Cross-platform notifications (Windows, macOS, Linux).
+## Features ✨
+- ▶️ Play music when battery reaches target level while charging
+- ⏹️ Automatically stop music when unplugged
+- 🔔 Cross-platform desktop notifications
+- 🖥️ Supports Windows, macOS, and Linux
+- ⚙️ Configurable battery percentage thresholds
+- 📝 Detailed logging system
 
 ## Requirements
 - Python 3.x
