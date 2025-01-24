@@ -43,3 +43,24 @@ class BatteryMusicNotifier:
             logging.error(f"Notification system initialization error: {e}")
             return None
                     
+    def send_notification(self, title, message):
+        pass
+    def play_music(self):
+        pass
+    def _play_audio_thread(self):
+        pass
+    def stop_music(self):
+        pass
+    def get_battery_info(self):
+        pass
+    def _get_windows_battery(self):
+        pass
+    def _get_macos_battery(self):
+        pass
+        
+    def _get_linux_battery(self):
+        pass
+
+    def monitor_battery_and_music(self):
+        pass
+        
