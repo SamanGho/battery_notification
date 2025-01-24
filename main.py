@@ -8,8 +8,8 @@ import soundfile as sf
 import time
 import logging
 
-log_directory='Put Your log dir'
-os.makedirs(log_directory, exist_ok=True) 
+log_directory = 'Put Your log dir'
+os.makedirs(log_directory, exist_ok=True)
 log_file_path = os.path.join(log_directory, 'battery_music_monitor.log')
 
 logging.basicConfig(
@@ -23,7 +23,7 @@ logging.basicConfig(
 
 if platform.system() == "Windows":
     from win10toast import ToastNotifier
-elif platform.system() == "Darwin":  #MAC
+elif platform.system() == "Darwin":  # MAC
     import pync
 else:  # Linux
     try:
@@ -35,12 +35,10 @@ else:  # Linux
             logging.warning("No notification library found for Linux")
             Notify = None
 
-    
 
 class BatteryMusicNotifier:
     def __init__(self, music_file_path, min_percentage=99, max_percentage=100):
         self.music_file_path = music_file_path
-
 
         self.MIN_PERCENTAGE = min_percentage
         self.MAX_PERCENTAGE = max_percentage
@@ -51,13 +49,10 @@ class BatteryMusicNotifier:
         self.play_thread = None
         self.stop_playback = threading.Event()
 
-
         self.was_charging_before_unplug = False
         self.target_met_before_unplug = False
 
-
         self.system = platform.system()
-
 
         self.notifier = self._initialize_notifier()
 
@@ -66,9 +61,9 @@ class BatteryMusicNotifier:
 
     def _initialize_notifier(self):
         try:
-            if self.system=="Windows":
+            if self.system == "Windows":
                 return ToastNotifier()
-            elif self.system=="Darwin":
+            elif self.system == "Darwin":
                 return pync
             elif self.system == "Linux":
                 if 'notify' in globals():
@@ -81,35 +76,56 @@ class BatteryMusicNotifier:
         except Exception as e:
             logging.error(f"Notification system initialization error: {e}")
             return None
-                    
+
     def send_notification(self, title, message):
-        pass
+        try:
+            if self.system == "Windows" and self.notifier:
+                self.notifier.show_toast(title , message , duration=5)
+            elif self.system== "Darwin" and self.notifier:
+                self.notifier.notify(title , message)
+            elif self.system == "Linux" :
+                if "notify2" in globals() and self.notifier:
+                    notification = self.notifier.Notification(title , message)
+                elif "Notify" in globals() and self.notifier:
+                    notification = self.notifier.Notification.new(title , message)
+                    notification.show()
+            logging.info(f"Notification : {title} - {message}")
+        except Exception as e:
+            logging.error(f"Notification error {e}")
+        
+
     def play_music(self):
         pass
+
     def _play_audio_thread(self):
         pass
+
     def stop_music(self):
         pass
+
     def get_battery_info(self):
         pass
+
     def _get_windows_battery(self):
         pass
+
     def _get_macos_battery(self):
         pass
-        
+
     def _get_linux_battery(self):
         pass
 
     def monitor_battery_and_music(self):
         pass
-        
+
+
 def main():
-    #full path to music
+    # full path to music
     music_file_path = r"Path to music.wav"
 
     notifier = BatteryMusicNotifier(music_file_path)
     notifier.monitor_battery_and_music()
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
     main()
