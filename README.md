@@ -35,7 +35,7 @@ All Platforms:
  ```
 ## MacOS
 ```bash
-  pip install pync  #Mac os
+  pip install pync 
 
 ```
 ## Linux
