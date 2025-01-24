@@ -92,22 +92,93 @@ class BatteryMusicNotifier:
             logging.info(f"Notification : {title} - {message}")
         except Exception as e:
             logging.error(f"Notification error {e}")
-        
+
 
     def play_music(self):
-        pass
+        try :
+            if not os.path.exist(self.music_file_path):
+                logging.error(f"Music file not found : {self.music_file_path}")
+                return False
+            self.stop_playback.clear()
+            self.play_thread = threading.Thread(target=self._play_audio_thread(),daemon=True)
+            self.play_thread.start()
+
+            self.song_playing = True
+
+            self.send_notification("Music Started",
+                                   f"Music Started playing at {datetime.now().strftime('%H:%M:%S')}")
+
+            logging.info(f"Playing Music : {os.path.basename(self.music_file_path)}")
+        except Exception as e:
+            logging.error(f"Music Playback error {e}")
 
     def _play_audio_thread(self):
-        pass
+        try:
+            date , samplerate = sf.read(self.music_file_path)
+            while not self.stop_playback.is_set():
+                sd.play(date,samplerate)
+                sd.wait()
+        except Exception as e:
+            logging.error(f"Audio thread error : {e}")
+
 
     def stop_music(self):
-        pass
+        try:
+            if self.song_playing:
+                self.stop_playback.set()
+                sd.stop()  # interrupt playback
 
+                if self.play_thread and self.play_thread.is_alive():
+                    self.play_thread.join(timeout=5)
+
+                self.song_playing = False
+                self.play_thread = None
+
+                self.send_notification(
+                    "Music Stopped",
+                    f"Music stopped at {datetime.now().strftime('%H:%M:%S')}"
+                )
+
+                logging.info("Music playback stopped")
+        except Exception as e:
+            logging.error(f"Music stop error: {e}")
     def get_battery_info(self):
-        pass
+        try:
+            if self.system == "Windows":
+                return self._get_windows_battery()
+            elif self.system == "Darwin":
+                return self._get_macos_battery()
+            elif self.system == "Linux":
+                return self._get_linux_battery()
 
+            logging.warning("Unsupported operating system")
+            return None
+
+        except Exception as e:
+            logging.error(f"Battery info retrieval error: {e}")
+            return None
     def _get_windows_battery(self):
-        pass
+        import wmi
+        c = wmi.WMI()
+        battery = c.Win32_Battery()[0]
+
+        current_percentage = battery.EstimatedChargeRemaining
+        current_charging = battery.BatteryStatus == 2      # 2 means charging
+
+        percentage_changed = (self.last_percentage is None or
+                              current_percentage != self.last_percentage)
+        charging_status_changed = (self.last_charging_status is None or
+                                   current_charging != self.last_charging_status)
+
+        self.last_percentage = current_percentage
+        self.last_charging_status = current_charging
+
+        return {
+            'percentage': current_percentage,
+            'charging': current_charging,
+            'percentage_changed': percentage_changed,
+            'charging_status_changed': charging_status_changed
+        }
 
     def _get_macos_battery(self):
         pass
@@ -116,8 +187,52 @@ class BatteryMusicNotifier:
         pass
 
     def monitor_battery_and_music(self):
-        pass
+        logging.info("Battery and Music Monitoring Started...")
 
+        while True:
+            try:
+                battery_info = self.get_battery_info()
+
+                if battery_info:
+                    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    status = "Charging" if battery_info['charging'] else "Discharging"
+
+                    logging.info(
+                        f"Battery: {battery_info['percentage']}% "
+                        f"Status: {status}"
+                    )
+
+                    target_met = (
+                            battery_info['percentage'] >= self.MIN_PERCENTAGE and
+                            battery_info['percentage'] <= self.MAX_PERCENTAGE
+                    )
+
+                    if battery_info['charging']:
+                        if target_met:
+                            self.was_charging_before_unplug = True
+                            self.target_met_before_unplug = True
+                            if not self.song_playing:
+                                self.play_music()
+                        else:
+                            if self.song_playing:
+                                self.stop_music()
+                    else:
+                        if self.was_charging_before_unplug and self.target_met_before_unplug:
+                            if self.song_playing:
+                                self.stop_music()
+
+                            self.was_charging_before_unplug = False
+                            self.target_met_before_unplug = False
+
+                time.sleep(3)
+
+            except KeyboardInterrupt:
+                self.stop_music()
+                logging.info("Monitoring stopped by user.")
+                break
+            except Exception as e:
+                logging.error(f"An error occurred during monitoring: {e}")
+                break
 
 def main():
     # full path to music
