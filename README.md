@@ -27,21 +27,17 @@ A cross-platform tool that plays music when your device battery reaches a specif
 ## Install dependencies:
 
 
-All Platforms:
-   ```bash
-  pip install sounddevice soundfile
- ```
 ## Windows
 ```bash
-  pip install wmi win10toast # Windows
+  pip install wmi win10toast sounddevice soundfile # Windows
  ```
 ## MacOS
 ```bash
-  pip install pync 
+  pip install pync sounddevice soundfile
 
 ```
 ## Linux
 ``` bash
 
 sudo apt-get install acpi portaudio19-dev libasound2-dev  # Debian/Ubuntu
-pip install notify2
+pip install notify2 sounddevice soundfile
