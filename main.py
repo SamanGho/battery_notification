@@ -117,10 +117,12 @@ class BatteryMusicNotifier:
             self.send_notification("Music Started",
                                    f"Music Started playing at {datetime.now().strftime('%H:%M:%S')}")
 
-            logging.info(f"Playing Music : {os.path.basename(self.music_file_path)}")
+            logging.info(f"Playing music: {os.path.basename(self.music_file_path)}")
+            return True
+
         except Exception as e:
             logging.error(f"Music Playback error {e}")
-
+            return False
     def _play_audio_thread(self):
         
         """Audio playback in a separate thread"""
