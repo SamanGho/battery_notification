@@ -38,7 +38,8 @@ All Platforms:
   pip install pync  #Mac os
 
 ```
-## for linux ``` bash
+## Linux
+``` bash
 
 sudo apt-get install acpi portaudio19-dev libasound2-dev  # Debian/Ubuntu
 pip install notify2
