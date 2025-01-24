@@ -181,11 +181,42 @@ class BatteryMusicNotifier:
         }
 
     def _get_macos_battery(self):
-        pass
+        result = subprocess.check_output(['pmset', '-g', 'batt']).decode('utf-8')
+        percentage = int(result.split('\t')[1].split('%')[0])
+        current_charging = 'AC Power' in result
 
+        percentage_changed = (self.last_percentage is None or
+                              percentage != self.last_percentage)
+        charging_status_changed = (self.last_charging_status is None or
+                                   current_charging != self.last_charging_status)
+
+        self.last_percentage = percentage
+        self.last_charging_status = current_charging
+
+        return {
+            'percentage': percentage,
+            'charging': current_charging,
+            'percentage_changed': percentage_changed,
+            'charging_status_changed': charging_status_changed
+        }
     def _get_linux_battery(self):
-        pass
+        result = subprocess.check_output(['acpi', '-b']).decode('utf-8')
+        percentage = int(result.split(': ')[1].split('%')[0])
+        current_charging = 'Charging' in result
 
+        percentage_changed = (self.last_percentage is None or
+                              percentage != self.last_percentage)
+        charging_status_changed = (self.last_charging_status is None or
+                                   current_charging != self.last_charging_status)
+
+        self.last_percentage = percentage
+        self.last_charging_status = current_charging
+
+        return {
+            'percentage': percentage, 'charging': current_charging,
+            'percentage_changed': percentage_changed,
+            'charging_status_changed': charging_status_changed
+        }
     def monitor_battery_and_music(self):
         logging.info("Battery and Music Monitoring Started...")
 
