@@ -66,7 +66,35 @@ class BatteryMusicNotifier:
         self.MAX_CONSECUTIVE_ERRORS = 5
 
         self.next_log_cleanup = datetime.now() + timedelta(days=3)
-        
+
+    def _convert_to_wav_if_needed(self, input_path):
+        """Convert audio file to WAV format if it's not already WAV"""
+        if input_path.lower().endswith('.wav'):
+            return input_path
+
+        try:
+            logging.info(f"Converting {input_path} to WAV format...")
+            sound = AudioSegment.from_file(input_path)
+
+            dir_name = os.path.dirname(input_path)
+            base_name = os.path.basename(input_path)
+
+            sanitized_base = os.path.splitext(base_name)[0]
+            sanitized_base = sanitized_base.replace(" ", "_").replace("(", "").replace(")", "")
+            sanitized_base += "_converted.wav"
+
+            output_path = os.path.join(dir_name, sanitized_base)
+
+            sound.export(output_path, format="wav")
+            logging.info(f"Converted to WAV: {output_path}")
+            return output_path
+        except CouldntDecodeError as e:
+            logging.error(f"Conversion error: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Unexpected conversion error: {e}")
+            raise
+            
     def _initialize_notifier(self):
         
         """Initialize platform-specific notification system"""
