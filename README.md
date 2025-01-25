@@ -14,6 +14,7 @@ for  laptops that when they charge fully it does not alarm you to unplug it this
 ## Requirements
 
 - Python 3.6+
+- Install ffmpeg for  converting audio file
 - Required Python packages:
   ```bash
   python -m pip install pydub numpy sounddevice python-dotenv tkinter soundfile
