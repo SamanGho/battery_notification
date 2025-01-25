@@ -22,14 +22,15 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s: %(message)s',
     handlers=[
-        logging.FileHandler(log_file_path)
-        , logging.StreamHandler()
+        logging.FileHandler(log_file_path),
+        logging.StreamHandler()
     ]
 )
 
+
 if platform.system() == "Windows":
     from win10toast import ToastNotifier
-elif platform.system() == "Darwin":  # MAC
+elif platform.system() == "Darwin":  # macOS
     import pync
 else:  # Linux
     try:
@@ -42,10 +43,11 @@ else:  # Linux
             Notify = None
 
 
+
 class BatteryMusicNotifier:
     def __init__(self, music_file_path, min_percentage=99, max_percentage=100):
-        self.music_file_path = music_file_path
-
+        self.original_music_path = music_file_path
+        self.music_file_path = self._convert_to_wav_if_needed(music_file_path)
         self.MIN_PERCENTAGE = min_percentage
         self.MAX_PERCENTAGE = max_percentage
 
@@ -57,14 +59,14 @@ class BatteryMusicNotifier:
 
         self.was_charging_before_unplug = False
         self.target_met_before_unplug = False
-
         self.system = platform.system()
-
         self.notifier = self._initialize_notifier()
 
         self.consecutive_errors = 0
         self.MAX_CONSECUTIVE_ERRORS = 5
 
+        self.next_log_cleanup = datetime.now() + timedelta(days=3)
+        
     def _initialize_notifier(self):
         
         """Initialize platform-specific notification system"""
