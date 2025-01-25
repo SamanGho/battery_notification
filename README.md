@@ -41,7 +41,7 @@ for  laptops that when they charge fully it does not alarm you to unplug it this
 Clone the repository:
 ```bash
 git clone https://github.com/SamanGho/battery_notification.git
-cd battery-music-monitor
+cd battery_notification
 ```
 
 Prepare your music file:
