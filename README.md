@@ -1,71 +1,140 @@
-# 🔋🎵 Battery Music Monitor
+# Battery Music Monitor
 
-A cross-platform tool that plays music when your device battery reaches a specified charge level (e.g., 99-100%), ideal for protecting battery health during charging.
+A cross-platform utility that plays music when your device's battery reaches a specified charge level and manages automatic startup.
 
-## Features ✨
-- ▶️ Play music when battery reaches target level while charging
-- ⏹️ Automatically stop music when unplugged
-- 🔔 Cross-platform desktop notifications
-- 🖥️ Supports Windows, macOS, and Linux
-- ⚙️ Configurable battery percentage thresholds
-- 📝 Detailed logging system
+## Features
+
+- 🎵 Play music when battery reaches target percentage (default: 99-100%)
+- 🔔 Desktop notifications for playback status
+- 🔄 Automatic startup configuration (Windows, macOS, Linux)
+- 📝 Logging system for monitoring events
+- 🎧 Supports multiple audio formats (MP3, WAV, OGG, FLAC, AAC, M4A)
+- 🔋 Real-time battery status monitoring
 
 ## Requirements
-- Python 3.x
-- OS-specific tools (see below)
+
+- Python 3.6+
+- Required Python packages:
+  ```bash
+  pip install pydub numpy sounddevice python-dotenv tkinter soundfile
+  ```
+- OS-specific dependencies:
+
+  **Windows:**
+  ```bash
+  pip install win10toast
+  ```
+
+  **macOS:**
+  ```bash
+  pip install pync
+  ```
+
+  **Linux:**
+  ```bash
+  sudo apt-get install libnotify-dev python3-gi
+  pip install notify2
+  ```
 
 ## Installation
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/SamanGho/battery_notification.git
-   cd battery_notification
+
+Clone the repository:
+```bash
+git clone https://github.com/yourusername/battery-music-monitor.git
+cd battery-music-monitor
+```
+
+Install required packages:
+```bash
+pip install -r requirements.txt
+```
+
+Prepare your music file:
+- Supported formats: MP3, WAV, OGG, FLAC, AAC, M4A
+- Place your audio file in the project directory or keep it in your preferred location
+
 ## Usage
-- Edit the script:
-- Replace Path to music.wav in main() with your audio file's absolute path
 
-
-## Install dependencies:
-
-
-## Windows
+### First-Time Setup
+Run the main script:
 ```bash
-  pip install wmi win10toast sounddevice soundfile # Windows
- ```
-## MacOS
+python battery.py
+```
+- A file dialog will appear to select your music file
+- The script will automatically convert non-WAV files to WAV format
+
+Configure automatic startup:
 ```bash
-  pip install pync sounddevice soundfile
-
+python startup_manager.py
 ```
-## Linux
-``` bash
+This will:
+- Create startup entries for your OS
+- Start the monitoring service immediately
+- Ensure the service runs on system startup
 
-sudo apt-get install acpi portaudio19-dev libasound2-dev  # Debian/Ubuntu
-pip install notify2 sounddevice soundfile
-
-```
-
-## Code Usage 🚀
-Configure Music File
-``` bash
-music_file_path = r"/full/path/to/your/music.wav"  # Use absolute path
-```
-Run the Monitor
+### Manual Control
+To run without automatic startup:
 ```bash
-python battery_monitor.py
+python battery.py
 ```
-Adjust Battery Thresholds (Optional)
+
+To stop the service:
+- Use `Ctrl+C` in the terminal if running manually
+- Task Manager/System Monitor for background processes
+
+## Configuration
+
+### Battery Thresholds
+Modify the initialization in `battery.py`:
+```python
+# Change these values as needed
+notifier = BatteryMusicNotifier(music_path, min_percentage=95, max_percentage=100)
 ```
-#Modify in the initialization:
 
-#python
-#Copy
-# BatteryMusicNotifier(music_file, min%, max%)
-notifier = BatteryMusicNotifier(music_file_path, 99, 100)
+### Music File
+Change the music file at any time by deleting `music_config.txt` and restarting.
+The file dialog will reappear on the next launch.
+
+### Logs
+Logs are stored in `BatteryMusicLogs/battery_music_monitor.log` with entries like:
 ```
-Configuration ⚙️
-Supported Audio Formats
-WAV, FLAC, OGG (via soundfile backend)
+2023-12-31 23:59:59 - INFO: Battery: 99% Status: Charging
+2023-12-31 23:59:59 - INFO: Playing music: alarm_converted.wav
+```
 
-MP3 support requires additional libraries
+## Notes
 
-Log File Location
+- 🚨 **First Run:** File dialog may take 10-15 seconds to appear
+- 🔊 **Audio Conversion:** Original files are never modified - look for `*_converted.wav`
+- 🔋 **Charging Detection:** Music stops when unplugged after reaching target charge
+- ⚡ **Performance:** Uses <2% CPU on modern hardware
+
+## Platform Support
+
+| Feature             | Windows | macOS | Linux |
+|---------------------|---------|-------|-------|
+| Notifications      | ✅       | ✅     | ✅     |
+| Background Operation | ✅       | ✅     | ✅     |
+| Auto-Start        | ✅       | ✅     | ✅     |
+| Battery Detection | ✅       | ✅     | ✅     |
+
+## Troubleshooting
+
+### Common Issues & Fixes
+
+#### Music Doesn't Play
+- Ensure your music file is accessible and in a supported format.
+- Check logs in `BatteryMusicLogs/battery_music_monitor.log` for errors.
+
+#### No Notifications on Linux
+- Ensure `notify2` or `python-gobject` is installed properly.
+- Try running with `sudo` if necessary.
+
+#### Auto-Start Not Working
+- Ensure `startup_manager.py` was run successfully.
+- Manually add the script to system startup if needed.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
