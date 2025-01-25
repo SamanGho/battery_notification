@@ -16,7 +16,7 @@ for  laptops that when they charge fully it does not alarm you to unplug it this
 - Python 3.6+
 - Required Python packages:
   ```bash
-  pip install pydub numpy sounddevice python-dotenv tkinter soundfile
+  python -m pip install pydub numpy sounddevice python-dotenv tkinter soundfile
   ```
 - OS-specific dependencies:
 
