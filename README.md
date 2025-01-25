@@ -134,7 +134,3 @@ Logs are stored in `BatteryMusicLogs/battery_music_monitor.log` with entries lik
 - Ensure `startup_manager.py` was run successfully.
 - Manually add the script to system startup if needed.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
