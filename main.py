@@ -1,14 +1,20 @@
 import platform
+import numpy as np
+from pydub import AudioSegment
+from pydub.exceptions import CouldntDecodeError
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import threading
 import sounddevice as sd
 import soundfile as sf
 import time
 import logging
+import tkinter as tk
+from tkinter import filedialog
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+log_directory = os.path.join(SCRIPT_DIR, 'BatteryMusicLogs') 
 
-log_directory = 'Put Your log dir'
 os.makedirs(log_directory, exist_ok=True)
 log_file_path = os.path.join(log_directory, 'battery_music_monitor.log')
 
