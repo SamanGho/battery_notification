@@ -41,3 +41,31 @@ A cross-platform tool that plays music when your device battery reaches a specif
 
 sudo apt-get install acpi portaudio19-dev libasound2-dev  # Debian/Ubuntu
 pip install notify2 sounddevice soundfile
+
+```
+
+## Code Usage 🚀
+Configure Music File
+``` bash
+music_file_path = r"/full/path/to/your/music.wav"  # Use absolute path
+```
+Run the Monitor
+```bash
+python battery_monitor.py
+```
+Adjust Battery Thresholds (Optional)
+```
+#Modify in the initialization:
+
+#python
+#Copy
+# BatteryMusicNotifier(music_file, min%, max%)
+notifier = BatteryMusicNotifier(music_file_path, 99, 100)
+```
+Configuration ⚙️
+Supported Audio Formats
+WAV, FLAC, OGG (via soundfile backend)
+
+MP3 support requires additional libraries
+
+Log File Location
