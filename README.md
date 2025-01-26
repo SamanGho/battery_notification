@@ -1,7 +1,9 @@
 # Battery Music Monitor
 
 A cross-platform utility that plays music when your device's battery reaches a specified charge level and manages automatic startup.
-for  laptops that when they charge fully it does not alarm you to unplug it this script that is running in bg ( background) play the music you want.
+for  laptops that when they charge fully it does not alarm you to unplug it .
+ script  is running in bg ( background) play the music that you want until you unplug.
+ 
 ## Features
 
 - 🎵 Play music when battery reaches target percentage (default: 99-100%)
