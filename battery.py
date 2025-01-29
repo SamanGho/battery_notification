@@ -12,6 +12,8 @@ import time
 import logging
 import tkinter as tk
 from tkinter import filedialog
+from contextlib import contextmanager
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 log_directory = os.path.join(SCRIPT_DIR, 'BatteryMusicLogs')
 
