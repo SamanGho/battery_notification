@@ -214,15 +214,6 @@ class BatteryMusicNotifier:
             logging.error(f"Music playback error: {e}")
             return False
 
-    def _play_audio_thread(self):
-        """Audio playback in a separate thread"""
-        try:
-            data, samplerate = sf.read(self.music_file_path)
-            while not self.stop_playback.is_set():
-                sd.play(data, samplerate)
-                sd.wait()
-        except Exception as e:
-            logging.error(f"Audio thread error: {e}")
 
     def stop_music(self):
         """Stop music playback with error handling"""
